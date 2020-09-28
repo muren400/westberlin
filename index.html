@@ -1,207 +1,22 @@
 <!doctype html>
-<html style="height: 100%">
+<html>
 
-	<head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <title>AM I IN WEST BERLIN?</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="js/leaflet/leaflet.css" />
+    <script type="text/javascript" src="js/path.js"></script>
+    <script type="text/javascript" src="js/westberlin.js"></script>
+    <script type="text/javascript" src="js/leaflet/leaflet.js"></script>
+</head>
 
-	  <meta charset="utf-8">
-	  <meta name="viewport" content="initial-scale=1.0">
-	  <title>AM I IN WEST BERLIN?</title>
-	  <!--link rel="stylesheet" href="css/standardize.css">
-	  <link rel="stylesheet" href="css/index.css"-->
-
-	</head>
-
-	<body style="position: relative; background-color: black; height: 100%; margin: 0">
-
-		<div id="map" style="width:100%;height:100%; margin: 0; opacity: 0"></div>
-
-		<p style=" position: fixed; color:black; font-size:300%; font-family:helvetica; text-align: center; margin: 0" id="button" onclick="onClick()">AM <br>I <br>IN <br>WEST <br>BERLIN?</p>
-
-		<script src="js/jquery-min.js"></script>
-
-		<script src="js/wallArray.js"></script>
-		<script src="js/path.js"></script>
-
-		<script src="http://maps.googleapis.com/maps/api/js"></script>
-
-		<script type="text/javascript">
-
-			var text = document.getElementById("button");
-			var win = document.body;
-	
-			text.style.cursor = 'pointer';
-
-			function rePlace(){
-				
-				var r = (win.offsetWidth/2) - (text.offsetWidth/2);
-				var t = (win.scrollHeight/2) - (text.offsetHeight/2);
-	
-				text.style.right =  r + "px";
-				text.style.top = t + "px";
-
-			}
-
-			window.addEventListener('resize', rePlace);
-
-			rePlace();
-
-		</script>
-
-		<script type="text/javascript">
-
-			var latitude;
-			var lon;
-
-			var pos = new google.maps.LatLng(latitude, lon);
-
-			var resultView = false;
-			var ishe = false;
-
-			function contains(test, points){
-				var i = 0;
-				var j = 0;
-				var result = false;
-
-				for (i = 0, j = points.length - 1; i < points.length; j = i++) {
-            		if ((points[i].y > test.y) != (points[j].y > test.y) &&
-                    		(test.x < (points[j].x
-                            		- points[i].x) * (test.y
-                            		- points[i].y) / (points[j].y-points[i].y)
-                            		+ points[i].x)){
-                		result = !result;
-            		}
-        		}
-
-        		return result;
-			}
-
-			function getLocation() {
-
-				if(!resultView){
-
-    				if (navigator.geolocation) {
-        				navigator.geolocation.getCurrentPosition(showPosition, showError);
-    				} 
-	
-    				else {
-    					alert("Geolocation is not supported by this browser.");
-    				}
-	
-				}
-
-				else{
-					document.getElementById("button").innerHTML = "AM <br>I <br>IN <br>WEST <br>BERLIN?";
-					resultView = false;
-					rePlace();
-				}
-			}
-
-			function showError(error) {
-    		switch(error.code) {
-		        case error.PERMISSION_DENIED:
-		        		alert("Please allow request for Geolocation.");
-		            break;
-		        case error.POSITION_UNAVAILABLE:
-		            alert("Location information is unavailable.");
-		            break;
-		        case error.TIMEOUT:
-		            alert("The request to get user location timed out.");
-		            break;
-		        case error.UNKNOWN_ERROR:
-		            alert("An unknown error occurred.");
-		            break;
-		    }		
-			}
-
-
-			function initMap() {
- 			  var map = new google.maps.Map(document.getElementById('map'), {
-			    zoom: 10,
-			    center: pos,
-			    mapTypeId: google.maps.MapTypeId.ROADMAP
-			  });			
-
-			  var plgn = new google.maps.Polygon({
-    			paths: flightPlanCoordinates,
-			    strokeColor: '#000000',
-			    strokeOpacity: 0.5,
-			    strokeWeight: 2,
-			    fillColor: '#000000',
-			    fillOpacity: 0.2
-			  });
-
-			  plgn.setMap(map);
-
-			  var marker = new google.maps.Marker({
-    			position: pos,
-    			map: map,
-    			title: 'YOU ARE HERE',
-    			icon: 'res/marker.png'
-  			});
-			}
-
-			function showPosition(position) {
-
-				latitude = position.coords.latitude;
-				lon = position.coords.longitude;
-
-				pos = new google.maps.LatLng(latitude, lon);
-
-				myLatLng = new google.maps.LatLng(latitude,lon);
-
-				var test = new Point(lon, latitude);
-				
-				//testpoints located in- and outside of westberlin
-				//var test = new Point(13.142395000000002,52.6297289);
-				//var test = new Point( 13.2192993,52.536272999999994);
-				//var test = new Point( 13.0380249,52.5086989);
-				//var test = new Point( 13.1767273,52.4543357);
-				//var test = new Point( 13.120422400000002,52.349602100000006);
-				//var test = new Point( 13.289337200000002,52.4350834);
-				//var test = new Point( 13.4719849,52.3454075);
-				//var test = new Point( 13.4060669,52.444292);
-				//var test = new Point( 13.5255432,52.6297289);
-				//var test = new Point( 13.268737799999998,52.5863634);
-				//var test = new Point( 13.142395000000002,52.6297289);
-
-
-				ishe = contains(test, wallArray);
-
-				initMap();
-			}
-
-			getLocation();
-			text.style.color = "white";
-
-
-			function onClick(){
-
-				if(!resultView){
-
-					if(ishe){
-						document.getElementById("button").innerHTML = "YOU <br>PROBABLY <br>ARE";	
-					}	
-
-					else{
-						document.getElementById("button").innerHTML = "YOU <br>PROBABLY <br>ARE <br>NOT";
-					}	
-
-					resultView = true;
-					rePlace();	
-	
-				}
-
-				else{
-					document.getElementById("map").style.opacity = 1;
-					$("#map").fadeOut(0).fadeIn(1000);	
-					document.getElementById("button").style.color = "black";
-					$("#button").fadeOut(0);	
-				}
-				
-				
-			}
-
-		</script>		
-	</body>
+<body style="position: relative; background-color: black; height: 100%; margin: 0">
+    <div id="map"></div>
+    <div id="button_container">
+        <p id="button">AM <br>I <br>IN <br>WEST <br>BERLIN?</p>
+    </div>
+</body>
 
 </html>
