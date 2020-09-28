@@ -41,7 +41,8 @@ function initwestBerlin() {
         }
         else {
             document.getElementById("map").style.opacity = 1;
-            button.classList.add("hidden");
+            document.getElementById("button").classList.add("hidden");
+            document.getElementById("button_container").classList.add("hidden");
         }
     });
 

@@ -10,10 +10,6 @@ body {
     margin: 0;
 }
 
-.hidden {
-    display: none;
-}
-
 .leaflet-popup-content-wrapper {
     font-size: 2em;
     font-weight: bold;
@@ -44,4 +40,8 @@ body {
     font-size: 3em;
     color: white;
     cursor: pointer;
+}
+
+.hidden {
+    display: none !important;
 }
