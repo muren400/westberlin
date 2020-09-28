@@ -13,10 +13,10 @@ function initwestBerlin() {
     button.addEventListener("click", () => {
         if (!resultView) {
             if (isInside) {
-                button.innerHTML = "YOU <br>PROBABLY <br>ARE";
+                button.innerHTML = "YOU<br>PROBABLY<br>ARE";
             }
             else {
-                button.innerHTML = "YOU <br>ARE <br>PROBABLY <br>NOT";
+                button.innerHTML = "YOU<br>ARE<br>PROBABLY<br>NOT";
             }
 
             resultView = true;
@@ -47,7 +47,7 @@ function getLocation() {
         }
     }
     else {
-        button.innerHTML = "AM <br>I <br>IN <br>WEST <br>BERLIN?";
+        button.innerHTML = "AM<br>I<br>IN<br>WEST<br>BERLIN?";
         resultView = false;
     }
 }
@@ -91,7 +91,7 @@ function onError(error) {
     switch (error.code) {
         case error.PERMISSION_DENIED:
             alert("Please allow request for Geolocation.");
-            button.innerHTML = "YOU <br>NEED <br>TO <br>ALLOW <br>GEOLOCATION!";
+            button.innerHTML = "YOU<br>NEED<br>TO<br>ALLOW<br>GEOLOCATION!";
             resultView = true;
             break;
         case error.POSITION_UNAVAILABLE:
